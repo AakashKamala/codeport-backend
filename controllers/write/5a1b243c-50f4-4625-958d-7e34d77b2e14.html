@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>To-Do List App</title>
+<style>
+body {
+  font-family: sans-serif;
+}
+.container {
+  width: 500px;
+  margin: 0 auto;
+}
+.item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.item input[type="checkbox"] {
+  margin-right: 10px;
+}
+.item label {
+  flex-grow: 1;
+}
+.item button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>To-Do List</h1>
+  <input type="text" id="newItem" placeholder="Add new item">
+  <button onclick="addItem()">Add</button>
+  <ul id="todoList">
+  </ul>
+</div>
+
+<script>
+  let todoList = [];
+
+  function addItem() {
+    const newItem = document.getElementById("newItem").value;
+    if (newItem !== "") {
+      todoList.push({ text: newItem, completed: false });
+      renderList();
+      document.getElementById("newItem").value = "";
+    }
+  }
+
+  function toggleComplete(index) {
+    todoList[index].completed = !todoList[index].completed;
+    renderList();
+  }
+
+  function deleteItem(index) {
+    todoList.splice(index, 1);
+    renderList();
+  }
+
+  function renderList() {
+    const todoListElement = document.getElementById("todoList");
+    todoListElement.innerHTML = ""; //clear list
+
+    todoList.forEach((item, index) => {
+      const listItem = document.createElement("li");
+      listItem.classList.add("item");
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = item.completed;
+      checkbox.onchange = () => toggleComplete(index);
+      listItem.appendChild(checkbox);
+
+      const label = document.createElement("label");
+      label.textContent = item.text;
+      listItem.appendChild(label);
+
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Delete";
+      deleteButton.onclick = () => deleteItem(index);
+      listItem.appendChild(deleteButton);
+
+
+      todoListElement.appendChild(listItem);
+    });
+  }
+</script>
+</body>
+</html>
